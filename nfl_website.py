@@ -76,6 +76,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 # plot labels
 stat_plot.set_xticklabels(['loss/tie','win'])
 st.pyplot(x='result', y=stat, data=nfl)
+plt.ioff()
 # list feature names
 print(nfl.columns[8:])
 
