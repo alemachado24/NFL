@@ -7,7 +7,6 @@
 import streamlit as st
 import pandas as pd
 import base64
-import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import requests
@@ -16,6 +15,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
 
 st.title('NFL Football Stats For My Understanding')
 
