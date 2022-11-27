@@ -28,7 +28,8 @@ This app performs simple webscraping of NFL Football player stats data & Predict
 
 # load dataset
 # nfl = pd.read_csv('/Users/am/Desktop/AleClasses/NFL/season_2021.csv')
-nfl = pd.read_csv('https://github.com/alemachado24/NFL/blob/main/season_2021.csv')
+nfl = pd.read_csv('https://github.com/alemachado24/NFL/blob/ad910a8343f728282ba33b6c936c512eae0cac0c/season_2021.csv')
+# https://github.com/alemachado24/NFL/blob/ad910a8343f728282ba33b6c936c512eae0cac0c/season_2021.csv
 
 # inspect first few rows
 # nfl.head()
