@@ -18,7 +18,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import io
 
+st.set_page_config(
+    page_title="NFL Stats",
+    page_icon="🏈",
+)
+# st.sidebar.header("NFL Stats")
+
+# st.sidebar.success("Select a demo above.")
+
 st.title('NFL Football Stats For My Understanding')
+
 
 st.markdown("""
 This app performs simple webscraping of NFL Football player stats data & Predicted Wins Vs. Actual Wins!!
@@ -54,6 +63,9 @@ nfl.replace(result_encoder, inplace=True)
 
 # check result value counts
 # nfl.result.value_counts()
+
+#side bars
+st.sidebar.header('User Input Features')
 
 graph_elements = ['1stD_offense', 'TotYd_offense', 'PassY_offense', 'RushY_offense',
        'TO_offense', '1stD_defense', 'TotYd_defense', 'PassY_defense',
@@ -213,8 +225,7 @@ st.bar_chart(chart_data)
 for i,v in enumerate(importance.round(2)):
     st.text(f'Feature: {features.columns[i]}, Score: {v}')
 
-#side bars
-st.sidebar.header('User Input Features')
+#sidebar
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1990,2023))))
 
 
@@ -278,6 +289,8 @@ def get_new_data(team, year):
 
     # remove future dates
     new_data = new_data[new_data.result.notnull()]
+#     new_data = new_data[new_data.result.fillna(0, inplace=True)]
+#     result.fillna(0, inplace=True)
 
     # add week variable back
     week = list(range(1,len(new_data)+1))
@@ -295,9 +308,8 @@ def get_new_data(team, year):
         return new_data.reset_index(drop=True)
 
 
-
-st.text(selected_team[0])
-st.text(selected_year)
+# st.text(selected_team[0])
+# st.text(selected_year)
 
 # st.text(list(new_data.team_name.unique()))
 
@@ -306,12 +318,8 @@ st.text(selected_year)
 # unique_pos = symbols
 # selected_pos = st.sidebar.multiselect('Teams', symbols, symbols)
 
-# team = 'Minnesota Vikings'
-# year = 2022
 
 st.header(f'Display Player Stats of {selected_team[0].upper()} in {selected_year}')
-# st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
-# st.dataframe(new_data)
 new_data = get_new_data(team=selected_team[0].upper(), year=selected_year)
 
 # Filtering data
@@ -380,7 +388,3 @@ st.text(f'\nCurrent Accuracy Score: ' + str(round(acc_score*100,1)) + '%')
 #         f, ax = plt.subplots(figsize=(7, 5))
 #         ax = sns.heatmap(corr, mask=mask, vmax=1, square=True)
 #     st.pyplot()
-
-
-
-
