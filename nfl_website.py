@@ -22,47 +22,34 @@ st.set_page_config(
     page_title="NFL Stats",
     page_icon="🏈",
 )
-# st.sidebar.header("NFL Stats")
 
+#This highlight the text in light green
 # st.sidebar.success("Select a demo above.")
 
 st.title('NFL Football Stats For My Understanding')
 
 
 st.markdown("""
-This app performs simple webscraping of NFL Football player stats data & Predicted Wins Vs. Actual Wins!!
+This app performs simple webscraping of NFL Football player stats data & Predicted Wins Vs. Actual Wins
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, sklearn
 * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
 """)
 
-
 # load dataset
-
-url_csv = "https://raw.githubusercontent.com/alemachado24/NFL/main/season_2021.csv" # Make sure the url is the raw version of the file on GitHub
+# Make sure the url is the raw version of the file on GitHub
+url_csv = "https://raw.githubusercontent.com/alemachado24/NFL/main/season_2021.csv" 
 download = requests.get(url_csv).content
-
 nfl = pd.read_csv(io.StringIO(download.decode('utf-8')),sep=',')
 
+#If you have the file saved in your computer
 # nfl = pd.read_csv('/Users/am/Desktop/AleClasses/NFL/season_2021.csv')
-# nfl = pd.read_csv(r'https://github.com/alemachado24/NFL/blob/ad910a8343f728282ba33b6c936c512eae0cac0c/season_2021.csv')
-# https://github.com/alemachado24/NFL/blob/ad910a8343f728282ba33b6c936c512eae0cac0c/season_2021.csv
-# season_2021.csv
 
 # inspect first few rows
 # nfl.head()
 
+#Title + Table in Display
 st.header('Display Player Stats for 2021 Season')
-# st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
 st.dataframe(nfl)
-
-# nested dictionary to encode alphanumeric values to numeric values
-result_encoder = {'result': {'W': 1, 'T': 0, 'L': 0}}
-
-# encode result column using encoder
-nfl.replace(result_encoder, inplace=True)
-
-# check result value counts
-# nfl.result.value_counts()
 
 #side bars
 st.sidebar.header('User Input Features')
@@ -72,26 +59,39 @@ graph_elements = ['1stD_offense', 'TotYd_offense', 'PassY_offense', 'RushY_offen
        'RushY_defense', 'TO_defense']
 
 # Sidebar - Graph Elements
-# selected_team = st.sidebar.multiselect('Team', symbols, symbols)
 selected_stat = st.sidebar.multiselect('Stats', graph_elements,default = graph_elements[4])
 
 st.header('Visualize the stats for 2021 Season')
 # change stat to view plot
-stat = selected_stat[0] #'1stD_offense'
+try:
+    stat = selected_stat[0] #'1stD_offense'
+    st.text(selected_stat[0])
 
-st.text(selected_stat[0])
+    # box plot of stat
+    stat_plot = sns.boxplot(x='result', y=stat, data=nfl)
+    #This turn off an alarm for using a Global Variable
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # plot labels
+    stat_plot.set_xticklabels(['loss/tie','win'])
+    st.pyplot(x='result', y=stat, data=nfl)
+    plt.ioff()
 
-# box plot of stat
-stat_plot = sns.boxplot(x='result', y=stat, data=nfl)
+except:
+    st.warning('Please pick a stat to visualize the plot')
 
-st.set_option('deprecation.showPyplotGlobalUse', False)
-# plot labels
-stat_plot.set_xticklabels(['loss/tie','win'])
-st.pyplot(x='result', y=stat, data=nfl)
-plt.ioff()
-# list feature names
-print(nfl.columns[8:])
+# # list feature names (columns in the NFL File)
+# st.text(nfl.columns[8:])
 
+#Header to check Model Accuracy
+st.header('Model Accuracy')
+
+# To Transform Wins Ties And L to numeric numbers
+# nested dictionary to encode alphanumeric values to numeric values
+result_encoder = {'result': {'W': 1, 'T': 0, 'L': 0}}
+# encode result column using encoder
+nfl.replace(result_encoder, inplace=True)
+# check result value counts (You should have numbers instead of W, T or L
+# nfl.result.value_counts()
 
 # select feature variables to be scaled
 features = nfl.iloc[:,8:]
@@ -126,6 +126,7 @@ penalties = ['l1', 'l2']
 # create a list of values for C
 C = [0.01, 0.1, 1.0, 10.0, 1000.0]
 
+#Check best values for Penalty and C values in the regression
 for penalty in penalties:
     for c in C:
 
@@ -150,16 +151,18 @@ for penalty in penalties:
 
 #         st.text(f'Accuracy: {max(accuracy_rd)}% | penalty = {penalty}, C = {c}')
 # st.text('Optimal Penalty & C Value:')
-
 # max_value = None
 # for n in accuracy_score(y_test, y_pred):
 #     if max_value is None or n > max_value: max_value = n
 # st.text(f'Accuracy: {max_value}%')
 
+
 #Missing to set this numbers to a variable dependable from above same for test sizes!!!
 # optimal penalty and C
 penalty = 'l1'
 C = 0.1
+
+#Missing to print the optimal test size instead of all of them !!!
 
 # create a list of test_sizes
 test_sizes = [val/100 for val in range(20,36)]
@@ -185,7 +188,8 @@ for test_size in test_sizes:
     # print accuracy for each combination of penalty and test size
     st.text(f'Accuracy: {accuracy_rd}% | test size = {test_size}')
     
-    
+
+#Missing to set this numbers to a variable dependable from above same for test sizes!!!
 # set the test size and hyperparameters
 test_size = 0.25
 penalty = 11
@@ -207,17 +211,9 @@ importance = abs(lrc.fit(X_train, y_train).coef_[0])
 # visualize feature importance
 sns.barplot(x=features.columns, y=importance)
 
-# add labels and titles
-# plt.suptitle('Feature Importance for Logistic Regression')
-# plt.xlabel('Score')
-# plt.ylabel('Stat')
-# plt.show()
-
+#Header + Table for Importance
 st.header('Feature Importance for Logistic Regression for 2021 Season')
-chart_data = pd.DataFrame(
-    importance,
-    features.columns)
-
+chart_data = pd.DataFrame(importance,features.columns)
 st.bar_chart(chart_data)
 
 
@@ -228,144 +224,117 @@ for i,v in enumerate(importance.round(2)):
 #sidebar
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1990,2023))))
 
-
 # Web scraping of NFL player stats
 # https://www.pro-football-reference.com/years/2019/rushing.htm
 symbols = ['CRD', 'ATL', 'RAV', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 'DAL', 'DEN', 'DET', 'GNB', 'HTX', 'CLT', 'JAX', 'KAN', 'RAI', 'SDG', 'RAM', 'MIA', 'MIN', 'NWE', 'NOR', 'NYG', 'NYJ', 'PHI', 'PIT', 'SFO', 'SEA', 'TAM', 'OTI', 'WAS']
 team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers', 'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos', 'Detroit Lions', 'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars', 'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins', 'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants', 'New York Jets', 'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks', 'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Football Team']
 
-# st.text([x.lower() for x in [symbols]])
-
 # Sidebar - Team selection
 all_lower_sym = [x.lower() for x in symbols]
 # st.text(all_lower_sym)
 sorted_unique_team = sorted(all_lower_sym)
-# selected_team = st.sidebar.multiselect('Team', symbols, symbols)
 selected_team = st.sidebar.multiselect('Team', sorted_unique_team,default = all_lower_sym[11])
 
+try:
+    @st.cache
+    def get_new_data(team, year):
+        '''
+        Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
+
+        - team : team name (str)
+        - year : year (int)
+        '''
+        # pull data
+        url = f'https://www.pro-football-reference.com/teams/{selected_team[0]}/{selected_year}.htm'
+        html = requests.get(url).text
+        #st.text(url)
+
+        # parse the data
+        soup = BeautifulSoup(html,'html.parser')
+        table = soup.find('table', id='games')
+        tablerows = table.find_all('tr')[2:]
+        data = []
+
+        for tablerow in tablerows:
+            data.append([tabledata.get_text(strip=True) for tabledata in tablerow.find_all('td')])
+
+        df = pd.DataFrame(data)
 
 
+        # subset
+        index = [0,1,4,8,9,10] + list(range(11,21))
+        new_data = df.iloc[:,index].copy()
 
-# st.text(symbols[team_names.index(selected_team)].lower())
+        # rename columns
+        col_names = ['day', 'date', 'result', 'opponent', 'tm_score', 'opp_score', '1stD_offense', 'TotYd_offense', 'PassY_offense', 'RushY_offense', 'TO_offense', '1stD_defense', 'TotYd_defense', 'PassY_defense', 'RushY_defense', 'TO_defense']
+        new_data.columns = col_names
 
-@st.cache
-def get_new_data(team, year):
-    '''
-    Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
-    
-    - team : team name (str)
-    - year : year (int)
-    '''
-    # pull data
-    url = f'https://www.pro-football-reference.com/teams/{selected_team[0]}/{selected_year}.htm'
-    html = requests.get(url).text
-#     st.text(url)
+        # encode results
+        result_encoder = {'result': {'L': 0, 'T': 0,'W': 1,'' : pd.NA},
+                         'TO_offense' : {'' : 0},
+                         'TO_defense' : {'' : 0}}
+        new_data.replace(result_encoder, inplace=True)
 
-    # parse the data
-    soup = BeautifulSoup(html,'html.parser')
-    table = soup.find('table', id='games')
-    tablerows = table.find_all('tr')[2:]
-    data = []
+        #Missing part to fill nulls with 0 for future predictions
+        # remove future dates
+        new_data = new_data[new_data.result.notnull()]
+    #     new_data = new_data[new_data.result.fillna(0, inplace=True)]
+    #     result.fillna(0, inplace=True)
 
-    for tablerow in tablerows:
-        data.append([tabledata.get_text(strip=True) for tabledata in tablerow.find_all('td')])
+        # add week variable back
+        week = list(range(1,len(new_data)+1))
+        new_data.insert(0, 'week', week)
 
-    df = pd.DataFrame(data)
+        # add team name
+        tn_col = pd.Series([f'{team}']).repeat(len(new_data)).reset_index(drop=True)
+        new_data.insert(0, 'team_name', tn_col)
 
-
-    # subset
-    index = [0,1,4,8,9,10] + list(range(11,21))
-    new_data = df.iloc[:,index].copy()
-
-    # rename columns
-    col_names = ['day', 'date', 'result', 'opponent', 'tm_score', 'opp_score', '1stD_offense', 'TotYd_offense', 'PassY_offense', 'RushY_offense', 'TO_offense', '1stD_defense', 'TotYd_defense', 'PassY_defense', 'RushY_defense', 'TO_defense']
-    new_data.columns = col_names
-
-    # encode results
-    result_encoder = {'result': {'L': 0, 'T': 0,'W': 1,'' : pd.NA},
-                     'TO_offense' : {'' : 0},
-                     'TO_defense' : {'' : 0}}
-    new_data.replace(result_encoder, inplace=True)
-
-    # remove future dates
-    new_data = new_data[new_data.result.notnull()]
-#     new_data = new_data[new_data.result.fillna(0, inplace=True)]
-#     result.fillna(0, inplace=True)
-
-    # add week variable back
-    week = list(range(1,len(new_data)+1))
-    new_data.insert(0, 'week', week)
-    
-    # add team name
-    tn_col = pd.Series([f'{team}']).repeat(len(new_data)).reset_index(drop=True)
-    new_data.insert(0, 'team_name', tn_col)
-
-    # return a dataframe object
-    if type(new_data) == pd.Series:
-        new_data = new_data.to_frame().T
-        return new_data.reset_index(drop=True)
-    else:
-        return new_data.reset_index(drop=True)
+        # return a dataframe object
+        if type(new_data) == pd.Series:
+            new_data = new_data.to_frame().T
+            return new_data.reset_index(drop=True)
+        else:
+            return new_data.reset_index(drop=True)
 
 
-# st.text(selected_team[0])
-# st.text(selected_year)
+    st.header(f'Display Player Stats of {selected_team[0].upper()} in {selected_year}')
+    new_data = get_new_data(team=selected_team[0].upper(), year=selected_year)
+    st.dataframe(new_data)
 
-# st.text(list(new_data.team_name.unique()))
+    # select just the game stats
+    new_X = new_data.loc[:,features.columns]
 
-# # Sidebar - Position selection
-# # unique_pos = ['RB','QB','WR','FB','TE']
-# unique_pos = symbols
-# selected_pos = st.sidebar.multiselect('Teams', symbols, symbols)
+    # standardize using original data's scaling
+    new_X_sc = scaler.transform(new_X)
 
+    # get new predictions
+    new_preds = lrc.fit(X_train, y_train).predict(new_X_sc)
 
-st.header(f'Display Player Stats of {selected_team[0].upper()} in {selected_year}')
-new_data = get_new_data(team=selected_team[0].upper(), year=selected_year)
+    # get actual results and set type to float
+    new_results = new_data['result'].astype(float)
 
-# Filtering data
-# df_selected_team = new_data[(new_data.team_name.isin(selected_team)) & (new_data.year.isin(selected_year))]
-# df_selected_team = new_data[(selected_team) & (selected_year)]
-# new_data.head()
-st.dataframe(new_data)
-# st.dataframe(df_selected_team)
+    # get accuracy score for new data
+    acc_score = accuracy_score(new_results, new_preds)
 
-# st.text('test')
+    # select only game data
+    col_names = ['day', 'date', 'result', 'opponent', 'tm_score', 'opp_score']
+    game_data = new_data.loc[:,col_names]
+    # create comparison table
+    comp_table = game_data.assign(predicted = new_preds,
+                                  actual = new_results.astype(int))
 
+    # st.header('Predicted Wins vs Actual Wins')
+    # print title and table
+    st.header(f'Predicted Wins vs Actual Wins for {selected_team[0].upper()} in {selected_year}')
+    comp_table
 
-# select just the game stats
-new_X = new_data.loc[:,features.columns]
-
-# standardize using original data's scaling
-new_X_sc = scaler.transform(new_X)
-
-# get new predictions
-new_preds = lrc.fit(X_train, y_train).predict(new_X_sc)
-
-# get actual results and set type to float
-new_results = new_data['result'].astype(float)
-
-# get accuracy score for new data
-acc_score = accuracy_score(new_results, new_preds)
-
-# select only game data
-col_names = ['day', 'date', 'result', 'opponent', 'tm_score', 'opp_score']
-game_data = new_data.loc[:,col_names]
-# create comparison table
-comp_table = game_data.assign(predicted = new_preds,
-                              actual = new_results.astype(int))
+    # print accuracy
+    st.text(f'\nCurrent Accuracy Score: ' + str(round(acc_score*100,1)) + '%')
+except:
+    st.warning('Please pick a team to visualize the Stats for the Season')
 
 
-# st.header('Predicted Wins vs Actual Wins')
-# print title and table
-st.header(f'Predicted Wins vs Actual Wins for {selected_team[0].upper()} in {selected_year}')
-comp_table
-
-# print accuracy
-st.text(f'\nCurrent Accuracy Score: ' + str(round(acc_score*100,1)) + '%')
-
-
-
-# # Download NBA player stats data
+# # To Download a File
 # # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
 # def filedownload(df):
 #     csv = df.to_csv(index=False)
@@ -375,7 +344,7 @@ st.text(f'\nCurrent Accuracy Score: ' + str(round(acc_score*100,1)) + '%')
 
 # st.markdown(filedownload(df_selected_team), unsafe_allow_html=True)
 
-# # Heatmap
+# # Heat Map 
 # if st.button('Intercorrelation Heatmap'):
 #     st.header('Intercorrelation Matrix Heatmap')
 #     df_selected_team.to_csv('output.csv',index=False)
