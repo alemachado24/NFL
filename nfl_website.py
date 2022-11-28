@@ -61,7 +61,7 @@ graph_elements = ['1stD_offense', 'TotYd_offense', 'PassY_offense', 'RushY_offen
 # Sidebar - Graph Elements
 selected_stat = st.sidebar.multiselect('Stats', graph_elements,default = graph_elements[4])
 
-st.header('Visualize the stats for 2021 Season')
+st.header('Visualize the stats for 2021 Season by Loss, Tie & Win')
 # change stat to view plot
 try:
     stat = selected_stat[0] #'1stD_offense'
@@ -72,18 +72,12 @@ try:
     #This turn off an alarm for using a Global Variable
     st.set_option('deprecation.showPyplotGlobalUse', False)
     # plot labels
-    stat_plot.set_xticklabels(['loss/tie','win'])
+    # stat_plot.set_xticklabels(['loss/tie','win'])
     st.pyplot(x='result', y=stat, data=nfl)
     plt.ioff()
 
 except:
     st.warning('Please pick a stat to visualize the plot')
-
-# # list feature names (columns in the NFL File)
-# st.text(nfl.columns[8:])
-
-#Header to check Model Accuracy
-st.header('Model Accuracy')
 
 # To Transform Wins Ties And L to numeric numbers
 # nested dictionary to encode alphanumeric values to numeric values
@@ -92,6 +86,29 @@ result_encoder = {'result': {'W': 1, 'T': 0, 'L': 0}}
 nfl.replace(result_encoder, inplace=True)
 # check result value counts (You should have numbers instead of W, T or L
 # nfl.result.value_counts()
+
+st.header('Visualize the stats for 2021 Season by Loss/Tie & Win')
+# change stat to view plot
+try:
+    stat = selected_stat[0] #'1stD_offense'
+    st.text(selected_stat[0])
+
+    # box plot of stat
+    stat_plot = sns.boxplot(x='result', y=stat, data=nfl)
+    #This turn off an alarm for using a Global Variable
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # plot labels
+    stat_plot.set_xticklabels(['Loss/Tie','Win'])
+    st.pyplot(x='result', y=stat, data=nfl)
+    plt.ioff()
+except:
+    st.warning('Please pick a stat to visualize the plot')
+
+# # list feature names (columns in the NFL File)
+# st.text(nfl.columns[8:])
+
+#Header to check Model Accuracy
+st.header('Model Accuracy')
 
 # select feature variables to be scaled
 features = nfl.iloc[:,8:]
