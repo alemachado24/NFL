@@ -17,6 +17,7 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io
+from streamlit.web import cli as stcli
 
 st.set_page_config(
     page_title="NFL Stats",
