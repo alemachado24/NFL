@@ -7,4 +7,4 @@ matplotlib==3.4.1
 scikit-learn
 plotly==4.14.3
 protobuf~=3.19.0
-streamlit==1.9.0 
+streamlit==1.15.0 
