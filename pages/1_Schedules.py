@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
-
 import streamlit as st
 import pandas as pd
 import base64
@@ -25,6 +21,8 @@ st.title('NFL Football Schedules')
 
 # st.markdown("Schedules")
 # st.sidebar.header("Schedules")
+
+st.sidebar.markdown("NFL Football Schedules")
 
 
 st.markdown("""
