@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[1]:
+
+
+
 import streamlit as st
 import pandas as pd
 import base64
@@ -21,7 +25,6 @@ st.title('NFL Football Schedules')
 
 # st.markdown("Schedules")
 # st.sidebar.header("Schedules")
-
 st.sidebar.markdown("NFL Football Schedules")
 
 
@@ -63,26 +66,22 @@ def get_new_data_future(year):
         data.append([tabledata.get_text(strip=True) for tabledata in tablerow.find_all('td')])
 
     df = pd.DataFrame(data)
-
+#     st.dataframe(df)
 
     # subset
+    index = [0,1,2,3,4,5,6]#list(range(1,8))
+    new_data = df.iloc[:,index].copy()
+#     st.dataframe(new_data)
+    
 #     index = [0,1,4,8,9,10] + list(range(11,21))
-    new_data = df
+#     new_data = df.iloc[:,index].copy()
 
-    # rename columns
-    col_names = [ 'Day', 'Date', 'Time', 'Winner/tie', '', 'Loser/tie', 'boxscore', 'PtsW', 'PtsL', 'YdsW', 'TOW', 'YdsL','TOL']
+#     rename columns
+    col_names = [ 'Day', 'Date', 'Time', 'Winner/Tie', '', 'Loser/Tie', 'Boxscore']
     new_data.columns = col_names
 
-#     # encode results
-#     result_encoder = {'result': {'L': 0, 'T': 0,'W': 1,'' : pd.NA},
-#                      'TO_offense' : {'' : 0},
-#                      'TO_defense' : {'' : 0}}
-#     new_data.replace(result_encoder, inplace=True)
-
     # upcoming dates
-    new_data=new_data.loc[new_data['boxscore']=='preview']
-# print(df.loc[df['A'] == 'foo'])
-# <NA>
+    new_data=new_data.loc[new_data['Boxscore']=='preview']
 
     # add week variable back
     week = list(range(1,len(new_data)+1))
@@ -166,16 +165,20 @@ def get_new_data(year):
         return new_data.reset_index(drop=True)
 
 st.header(f'Games Scheduled in {selected_year}')
+    
 new_data = get_new_data(year=selected_year)
 
 # Filtering data
-st.dataframe(new_data)
 
-st.text('Week -- Week number in season')
-st.text('Time -- Game Time, Eastern')
-st.text('PtsW -- Points Scored by the winning team (first one listed)')
-st.text('PtsL -- Points Scored by the losing team (second one listed)')
-st.text('YdsW -- Yards Gained by the winning team (first one listed)')
-st.text('TOW -- Turnovers by the winning team (first one listed)')
-st.text('YdsL -- Yards Gained by the losing team (second one listed)')
-st.text('TOL -- Turnovers by the losing team (second one listed)')
+my_expander = st.expander(label=(f'Click Here to display all Games Scheduled in {selected_year}'))
+with my_expander:
+    st.dataframe(new_data)
+    st.text('Week: Week number in season')
+    st.text('Time: Game Time, Eastern')
+    st.text('PtsW: Points Scored by the winning team (first one listed)')
+    st.text('PtsL: Points Scored by the losing team (second one listed)')
+    st.text('YdsW: Yards Gained by the winning team (first one listed)')
+    st.text('TOW: Turnovers by the winning team (first one listed)')
+    st.text('YdsL: Yards Gained by the losing team (second one listed)')
+    st.text('TOL: Turnovers by the losing team (second one listed)')
+   
