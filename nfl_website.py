@@ -21,7 +21,7 @@ import io
 
 st.set_page_config(
     page_title="NFL Stats",
-    page_icon="🏈"
+    page_icon="🏈",
 )
 
 #This highlight the text in light green
