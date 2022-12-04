@@ -24,6 +24,8 @@ st.title('Five Thirty Eight Forecast')
 
 # 🎰
 
+st.sidebar.markdown("NFL Football Forecast from 538")
+
 
 st.markdown("""
 This app performs simple webscraping of NFL Football player stats data & Predicted Wins Vs. Actual Wins
