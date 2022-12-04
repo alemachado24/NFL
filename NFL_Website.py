@@ -21,7 +21,7 @@ st.set_page_config(page_title="NFL Stats",page_icon="🏈",)
 #This highlight the text in light green
 # st.sidebar.success("Select a demo above.")
 
-st.title('NFL Football Stats For My Understanding TESTS')
+st.title('NFL Football Stats For My Understanding')
 st.sidebar.markdown("NFL Football Stats")
 
 
