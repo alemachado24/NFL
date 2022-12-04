@@ -28,6 +28,7 @@ st.set_page_config(
 # st.sidebar.success("Select a demo above.")
 
 st.title('NFL Football Stats For My Understanding')
+st.sidebar.markdown("NFL Football Stats")
 
 
 st.markdown("""
