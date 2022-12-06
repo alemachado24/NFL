@@ -62,8 +62,6 @@ if current_day == 1:
     weeks_toexclude='Week '+ str(week_num-37)
 else:
     weeks_toexclude='Week '+ str(week_num-36)
-st.text("weeks_toexclude")
-st.text(weeks_toexclude)
 
 st.header(f'Standing {selected_year} NFL Forecast from FiveThirtyEight ')
 #------------- webscrap for elo
