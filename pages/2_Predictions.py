@@ -14,7 +14,6 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io
-from requests_html import HTMLSession
 from datetime import date
 import re
 import datetime
