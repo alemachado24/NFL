@@ -31,8 +31,8 @@ st.title('Five Thirty Eight Forecast')
 st.sidebar.markdown("NFL Football Forecast")
 
 
-st.markdown("This app performs simple webscraping of NFL Football player stats data")
-st.markdown("Data Sourcers: fivethirtyeight and pro-football-reference Websites")
+st.caption("This app performs simple webscraping of NFL Football player stats data")
+st.caption("Data Sources: fivethirtyeight and pro-football-reference Websites")
 
 #sidebar
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1990,2023))))
