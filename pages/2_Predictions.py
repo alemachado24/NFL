@@ -31,11 +31,8 @@ st.title('Five Thirty Eight Forecast')
 st.sidebar.markdown("NFL Football Forecast")
 
 
-st.markdown("""
-This app performs simple webscraping of NFL Football player stats data & Predicted Wins Vs. Actual Wins
-* **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, sklearn
-* **Data source:** [https://projects.fivethirtyeight.com/](https://projects.fivethirtyeight.com/).
-""")
+st.markdown("This app performs simple webscraping of NFL Football player stats data")
+st.markdown("Data Sourcers: fivethirtyeight and pro-football-reference Websites")
 
 #sidebar
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1990,2023))))
