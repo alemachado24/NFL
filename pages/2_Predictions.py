@@ -609,8 +609,25 @@ with upcoming_games:
 
             # to combined 2 dataframes by adding new columns
             combined_list = pd.concat([df2, df], axis=1)
+            
+            if short_name == 'RAI':
+                injury_name='LVR'
+            elif short_name == 'SDG':
+                injury_name='LAC'
+            elif short_name == 'RAM':
+                injury_name='LAR'
+            elif short_name == 'CRD':
+                injury_name='ARI'
+            elif short_name == 'RAV':
+                injury_name='BAL'
+            elif short_name == 'OTI':
+                injury_name='TEN'
+            elif short_name == 'HTX':
+                injury_name='HOU'
+            else:
+                injury_name=short_name
 
-            new_data = combined_list.loc[combined_list['Team']==short_name]
+            new_data = combined_list.loc[combined_list['Team']==injury_name]
     #         st.dataframe(combined_list)
     #         st.text(short_name)
             return new_data
