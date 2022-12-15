@@ -31,6 +31,11 @@ st.title('Five Thirty Eight Forecast')
 st.sidebar.markdown("NFL Football Forecast")
 
 
+# st.markdown("""
+# This app performs simple webscraping of NFL Football player stats data
+# * **Data source:** [https://projects.fivethirtyeight.com/](https://projects.fivethirtyeight.com/).
+# """)
+
 st.caption("This app performs simple webscraping of NFL Football player stats data")
 st.caption("Data Sources: fivethirtyeight and pro-football-reference Websites")
 
@@ -105,7 +110,7 @@ with upcoming_games:
     st.header("Upcoming Games")
 
     #---------------------------------Week Forecast & Upcomming Games
-    row1_1, row1_2 = st.columns((3, 2))#st.columns(2)
+    row1_1, row1_2 = st.columns((3, 3))#st.columns(2)
 
     with row1_2:
 
@@ -151,8 +156,9 @@ with upcoming_games:
             df_tocheck3=df_tocheck2.loc[df_tocheck2['Time']!='FINALEastern']
         #     st.dataframe(df_tocheck3)
             df_tocheck4=df_tocheck3.loc[df_tocheck3['Score']=='']
+            df_tocheck5=df_tocheck4.drop(['Score'], axis=1)
 
-            return df_tocheck4
+            return df_tocheck5
 
 
         st.dataframe(get_new_data538_games(selected_year))
@@ -194,17 +200,18 @@ with upcoming_games:
 
             # upcoming dates
             new_data=new_data.loc[new_data['Boxscore']=='preview']
+            new_data2=new_data.drop(['Boxscore'], axis=1)
 
             # add week variable back
     #         week = list(range(1,len(new_data)+1))
     #         new_data.insert(0, 'Week', week)
 
             # return a dataframe object
-            if type(new_data) == pd.Series:
-                new_data = new_data.to_frame().T
-                return new_data.reset_index(drop=True)
+            if type(new_data2) == pd.Series:
+                new_data2 = new_data2.to_frame().T
+                return new_data2.reset_index(drop=True)
             else:
-                return new_data.reset_index(drop=True)
+                return new_data2.reset_index(drop=True)
 
         st.write(f'Upcoming Games Scheduled in {selected_year}')
         st.write('')
@@ -296,6 +303,8 @@ with upcoming_games:
             short_name = 'OTI'
         elif selected_team_full[0] == 'Washington Football Team':
             short_name = 'WAS'
+            
+#         st.text(short_name)
 
         @st.cache
         def get_record(team, year):
@@ -356,7 +365,7 @@ with upcoming_games:
             return pointsagainst
     #     get_record(team=short_name.lower(), year=selected_year)
 
-        row1_5, row1_6,row1_7,row1_8 = st.columns((1.5, 3, 3, 3))#st.columns(2)
+        row1_5, row1_6, row1_7,row1_8 = st.columns((1.5, 3, 3, 3))#st.columns(2)
 
 
 
@@ -469,18 +478,25 @@ with upcoming_games:
         with row1_all_2022:
             inform = f"All Past Games this season: Win = 1, Loss/Tie=0"
             fig_all = px.line(new_data_2022, x="Date", y=new_data_2022['result'], title=inform)
+            fig_all.update_traces(line=dict(color="#013369"))
+            fig_all.update_layout({ 'plot_bgcolor': 'rgba(128,128,128, 0.1)', 'paper_bgcolor': 'rgba(128,128,128, 0)', })
             st.plotly_chart(fig_all, use_container_width=True)
             
 
         with row1_home_2022:
             inform = f"Home Games: Win = 1, Loss/Tie=0"
             fig_home = px.line(chart_home_2022, x="Date", y=chart_home_2022['result'], title=inform)
+            fig_home.update_traces(line=dict(color="#013369"))
+            fig_home.update_layout({ 'plot_bgcolor': 'rgba(128,128,128, 0.1)', 'paper_bgcolor': 'rgba(128,128,128, 0)', })
             st.plotly_chart(fig_home, use_container_width=True)
 
         with row1_away_2022:
             inform = f"Away Games: Win = 1, Loss/Tie=0"
             fig_away = px.line(chart_away_2022, x="Date", y=chart_away_2022['result'], title=inform)
+            fig_away.update_traces(line=dict(color="#013369"))
+            fig_away.update_layout({ 'plot_bgcolor': 'rgba(128,128,128, 0.1)', 'paper_bgcolor': 'rgba(128,128,128, 0)', })
             st.plotly_chart(fig_away, use_container_width=True)
+            
 
 
         my_expander_lastseason = st.expander(label=f'Click Here to access More Stats for {selected_year} Season for {selected_team_full[0]}')
@@ -565,8 +581,9 @@ with upcoming_games:
 
 
             new_data3 = new_data2.loc[new_data2['Team']==fanatasy_name]
+            new_data4=new_data3.drop(['FantPt', 'PPR','DkPt', 'FdPt','VBD', 'OvRan'], axis=1)
         #     st.dataframe(new_data3)
-            return new_data3
+            return new_data4
 
         
         #------------------End of Fantasy
@@ -628,15 +645,16 @@ with upcoming_games:
                 injury_name=short_name
 
             new_data = combined_list.loc[combined_list['Team']==injury_name]
-    #         st.dataframe(combined_list)
-    #         st.text(short_name)
+#             st.text(short_name)
+#             st.text(injury_name)
+#             st.dataframe(combined_list)
             return new_data
     
         st.header(f"Impact Players and Injury Report for {selected_team_full[0]}")
         offense_deffense = st.expander(label=f'Click Here for Impact Players and Injury Report')
         with offense_deffense:
-            row1_3, row1_4 = st.columns((4, 4))#st.columns(2)
-            
+            row1_3, row1_4 = st.columns((2, 2))#st.columns(2)
+#             st.dataframe(fanatasy_name)
             with row1_3:
                 # st.text(short_name)
                 st.header(f"Impact players")
@@ -648,13 +666,14 @@ with upcoming_games:
                 st.dataframe(injuries)
                 injury_count = len(injuries.index)
                 
+                
 
         with row1_6:
             st.header("Team Summary")
             st.markdown(f'Team record: {get_record(team=short_name.lower(), year=selected_year)}')
             st.markdown(f'Points For: {get_points_for(team=short_name.lower(), year=selected_year)}')
             st.markdown(f'Points Against: {get_points_against(team=short_name.lower(), year=selected_year)}')
-            st.markdown(f'Team Injury Count: {injury_count}')
+            st.markdown(f'Team Injury Count for Current Week: {injury_count}')
         
             #---------------------------------------Last Year Home & Away
         st.header(f'{selected_team_full[0]} games in {selected_year-1}')
@@ -737,6 +756,8 @@ with upcoming_games:
             #     st.write("Home Games")
                 inform = f"Home Games: Win = 1, Loss/Tie=0"
                 fig_home_previous = px.line(chart_home_previous, x="Date", y=chart_home_previous['Result'], title=inform)
+                fig_home_previous.update_traces(line=dict(color="#013369"))
+                fig_home_previous.update_layout({ 'plot_bgcolor': 'rgba(128,128,128, 0.1)', 'paper_bgcolor': 'rgba(128,128,128, 0)', })
                 st.plotly_chart(fig_home_previous, use_container_width=True)
 
             with row1_away_previous:
@@ -744,6 +765,8 @@ with upcoming_games:
             #     st.write("Away Games")
                 inform = f"Away Games: Win = 1, Loss/Tie=0"
                 fig_away_away = px.line(chart_away_previous, x="Date", y=chart_away_previous['Result'], title=inform)
+                fig_away_away.update_traces(line=dict(color="#013369"))
+                fig_away_away.update_layout({ 'plot_bgcolor': 'rgba(128,128,128, 0.1)', 'paper_bgcolor': 'rgba(128,128,128, 0)', })
                 st.plotly_chart(fig_away_away, use_container_width=True)
 
 
