@@ -77,7 +77,7 @@ with general_stats:
 
     st.header(f'Standing {selected_year} NFL Forecast from FiveThirtyEight ')
     #---------------------------------538 Prediction Table
-    @st.cache
+#     @st.cache
     def get_new_data538(year):
         '''
         Function to pull NFL stats from 538 Reference (https://projects.fivethirtyeight.com/2022-nfl-predictions/).
@@ -146,7 +146,7 @@ with upcoming_games:
         st.write(f'Games Win Probabilities in {selected_year} from FiveThirtyEight ')
         st.write('')
         #------------- webscrap for elo
-        @st.cache(hash_funcs={pd.DataFrame: lambda _: None})
+#         @st.cache(hash_funcs={pd.DataFrame: lambda _: None})
         def get_new_data538_games(year):
             '''
             Function to pull NFL stats from 538 Reference (https://projects.fivethirtyeight.com/2022-nfl-predictions/).
@@ -202,7 +202,7 @@ with upcoming_games:
         st.dataframe(s)
 
     with row1_1:
-        @st.cache
+#         @st.cache
         def get_new_data_future(year):
             '''
             Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
@@ -346,7 +346,7 @@ with upcoming_games:
 
     #         st.text(short_name)
 
-            @st.cache
+#             @st.cache
             def get_record(team, year):
                 '''
                 Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
@@ -409,7 +409,7 @@ with upcoming_games:
 
     #             return record[:comma], pointsfor, pointsagainst, logo
                     # st.header("Injury Reports")
-            @st.cache
+#             @st.cache
             def get_injuries():
                 '''
                 Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
@@ -557,7 +557,7 @@ with upcoming_games:
 
         # st.header(f"Impact players from fantasy info for {selected_team_full[0]}")
 
-            @st.cache
+#             @st.cache
             def get_fantasy(year):
                 '''
                 Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
@@ -808,7 +808,7 @@ with upcoming_games:
 
     #         st.text(short_name)
 
-            @st.cache
+#             @st.cache
             def get_record2(team, year):
                 '''
                 Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
@@ -871,7 +871,7 @@ with upcoming_games:
 
     #             return record[:comma], pointsfor, pointsagainst, logo
                     # st.header("Injury Reports")
-            @st.cache
+#             @st.cache
             def get_injuries2():
                 '''
                 Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
@@ -1020,7 +1020,7 @@ with upcoming_games:
 
         # st.header(f"Impact players from fantasy info for {selected_team_full[0]}")
 
-            @st.cache
+#             @st.cache
             def get_fantasy2(year):
                 '''
                 Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
