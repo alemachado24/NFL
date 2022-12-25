@@ -1,26 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
-
 import streamlit as st
 import pandas as pd
 import base64
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-import matplotlib.pyplot as plt
-import seaborn as sns
-import io
-import datetime
-import re
-from bs4 import BeautifulStoneSoup
+
 
 st.set_page_config(page_title="TD", page_icon="🏈")
 
@@ -133,56 +120,6 @@ elif short_name == 'HTX':
 else:
     injury_name=short_name
 
-st.header('Rushing and Receiving')
-def get_scrimmage( year):
-    '''
-    Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
-    - team : team name (str)
-    - year : year (int)
-    '''
-    # pull data
-    url = f'https://www.pro-football-reference.com/years/{selected_year}/scrimmage.htm'
-    html = requests.get(url).text
-    #st.text(url) https://www.pro-football-reference.com/teams/gnb/2022.htm#passing
-
-    # parse the data
-    soup = BeautifulSoup(html,'html.parser')
-    
-    
-########################################### Receiving ##########################################################    
-    
-    table_scri = soup.find('table', id='receiving_and_rushing') #rushing_and_receiving #all_advanced_rushing
-#     st.dataframe(table_rush)
-    
-    tablerows_scri = table_scri.find_all('tr')[2:]
-    
-    data_scri = []
-
-    for tablerow in tablerows_scri:#[2:]:
-        try:
-            data_scri.append([tabledata.get_text(strip=True) for tabledata in tablerow.find_all('td')])
-        except:
-            pass
-#         
-
-    df_scri = pd.DataFrame(data_scri)
-#     st.dataframe(df_scri)
-    
-    index = [0,1] + [3] + [8] + [10] + [15] + [18,19] + [28] #+ list(range(7,21))
-    df_scri_new = df_scri.iloc[:,index].copy()
-    
-    
-    col_names = ['Player', 'Team', 'Position', 'Rec Yds', 'Rec TD','Catch%', 'Rush Yds', 'Rush TD', 'Rush & Rec TD']
-    df_scri_new.columns = col_names
-    
-#     st.dataframe(df_scri_new)
-    return df_scri_new
-    
-
-scri_td = get_scrimmage(year=selected_year)
-# st.dataframe(scri_td)
-scri_td_df = scri_td.loc[scri_td['Team']==injury_name]
-st.dataframe(scri_td_df)
 
 
 st.header('Passing')
@@ -235,6 +172,59 @@ def get_passing( year):
 pass_td = get_passing(year=selected_year)
 pass_td_df = pass_td.loc[pass_td['Team']==injury_name]
 st.dataframe(pass_td_df)
+
+
+st.header('Rushing and Receiving')
+def get_scrimmage( year):
+    '''
+    Function to pull NFL stats from Pro Football Reference (https://www.pro-football-reference.com/).
+    - team : team name (str)
+    - year : year (int)
+    '''
+    # pull data
+    url = f'https://www.pro-football-reference.com/years/{selected_year}/scrimmage.htm'
+    html = requests.get(url).text
+    #st.text(url) https://www.pro-football-reference.com/teams/gnb/2022.htm#passing
+
+    # parse the data
+    soup = BeautifulSoup(html,'html.parser')
+    
+    
+########################################### Receiving ##########################################################    
+    
+    table_scri = soup.find('table', id='receiving_and_rushing') #rushing_and_receiving #all_advanced_rushing
+#     st.dataframe(table_rush)
+    
+    tablerows_scri = table_scri.find_all('tr')[2:]
+    
+    data_scri = []
+
+    for tablerow in tablerows_scri:#[2:]:
+        try:
+            data_scri.append([tabledata.get_text(strip=True) for tabledata in tablerow.find_all('td')])
+        except:
+            pass
+#         
+
+    df_scri = pd.DataFrame(data_scri)
+#     st.dataframe(df_scri)
+    
+    index = [0,1] + [3] + [8] + [10] + [15] + [18,19] + [28] #+ list(range(7,21))
+    df_scri_new = df_scri.iloc[:,index].copy()
+    
+    
+    col_names = ['Player', 'Team', 'Position', 'Rec Yds', 'Rec TD','Catch%', 'Rush Yds', 'Rush TD', 'Rush & Rec TD']
+    df_scri_new.columns = col_names
+    
+#     st.dataframe(df_scri_new)
+    return df_scri_new
+    
+
+scri_td = get_scrimmage(year=selected_year)
+# st.dataframe(scri_td)
+scri_td_df = scri_td.loc[scri_td['Team']==injury_name]
+st.dataframe(scri_td_df)
+
 
 
 #MISSING TOUCHDOWN LOG
