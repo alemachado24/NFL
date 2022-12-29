@@ -158,11 +158,11 @@ def get_passing( year):
 
     df_pass = pd.DataFrame(data_pass)
     
-    index = [0,1] + [3] + [10,11,12] #+ list(range(7,21))
+    index = [0,1] + [3,4] + [10,11,12] #+ list(range(7,21))
     df_pass_new = df_pass.iloc[:,index].copy()
     
     
-    col_names = ['Player', 'Team', 'Position', 'Yds Gained', 'Pass TD','TD%']
+    col_names = ['Player', 'Team', 'Position', 'Games Played', 'Yds Gained', 'Pass TD','TD%']
     df_pass_new.columns = col_names
     
 #     st.dataframe(df_pass_new)
@@ -209,11 +209,11 @@ def get_scrimmage( year):
     df_scri = pd.DataFrame(data_scri)
 #     st.dataframe(df_scri)
     
-    index = [0,1] + [3] + [8] + [10] + [15] + [18,19] + [28] #+ list(range(7,21))
+    index = [0,1] + [3,4] + [8] + [10] + [15] + [18,19] + [28] #+ list(range(7,21))
     df_scri_new = df_scri.iloc[:,index].copy()
     
     
-    col_names = ['Player', 'Team', 'Position', 'Rec Yds', 'Rec TD','Catch%', 'Rush Yds', 'Rush TD', 'Rush & Rec TD']
+    col_names = ['Player', 'Team', 'Position', 'Games Played', 'Rec Yds', 'Rec TD','Catch%', 'Rush Yds', 'Rush TD', 'Rush & Rec TD']
     df_scri_new.columns = col_names
     
 #     st.dataframe(df_scri_new)
