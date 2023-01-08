@@ -507,6 +507,7 @@ with upcoming_games:
 
 
             offanddef=new_data_22.loc[new_data_22['Day']!='']
+            offanddef=new_data_22.loc[new_data_22['Team Score']!='Canceled']
             def_dataTO = offanddef.loc[offanddef['Def TO']!='']
             off_dataTO = offanddef.loc[offanddef['Off TO']!='']
             sumDefTO = def_dataTO['Def TO'].astype(int).sum(skipna = True) #sum(axis = 1, skipna = True)
@@ -970,6 +971,7 @@ with upcoming_games:
 
 
             offanddef_team2=new_data_22_team2.loc[new_data_22_team2['Day']!='']
+            offanddef_team2=new_data_22_team2.loc[new_data_22_team2['Team Score']!='Canceled']
             def_dataTO_team2 = offanddef_team2.loc[offanddef_team2['Def TO']!='']
             off_dataTO_team2 = offanddef_team2.loc[offanddef_team2['Off TO']!='']
             sumDefTO_team2 = def_dataTO_team2['Def TO'].astype(int).sum(skipna = True) #sum(axis = 1, skipna = True)
