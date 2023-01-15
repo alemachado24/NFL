@@ -98,7 +98,7 @@ with general_stats:
     #     st.dataframe(table)
 
         #to find all row values in the table
-        gdp_table_data = table.tbody.find_all("tr")[2:] 
+        gdp_table_data = table.tbody.find_all("tr")
     #     st.text(gdp_table_data)
 
         #it's not for headings, it's for the row data
